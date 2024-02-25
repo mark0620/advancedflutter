@@ -25,12 +25,12 @@ class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
     super.initState();
     controller.addListener(scrollListener);
   }
-  void scrollListener(){
 
-    if(controller.offset > controller.position.maxScrollExtent - 300 ){
+  void scrollListener() {
+    if (controller.offset > controller.position.maxScrollExtent - 300) {
       ref.read(restaurantProvider.notifier).paginate(
-          fetchMore: true,
-      );
+            fetchMore: true,
+          );
     }
   }
 
@@ -39,13 +39,13 @@ class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
     final data = ref.watch(restaurantProvider);
 
     //완전 처음 로딩일 때
-    if(data is CursorPaginationLoading){
+    if (data is CursorPaginationLoading) {
       return Center(
         child: CircularProgressIndicator(),
       );
     }
 
-    if (data is CursorPaginationError){
+    if (data is CursorPaginationError) {
       return Center(
         child: Text(data.message),
       );
@@ -58,29 +58,38 @@ class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
     final cp = data as CursorPagination;
 
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: ListView.separated(
-          controller: controller,
-          itemCount: cp.data.length,
-          itemBuilder: (_, index) {
-            final pItem = cp.data[index];
-            return GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => RestaurantDetailScreen(
-                      id: pItem.id,
-                    ),
-                  ),
-                );
-              },
-              child: RestaurantCard.fromModel(model: pItem),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: ListView.separated(
+        controller: controller,
+        itemCount: cp.data.length + 1,
+        itemBuilder: (_, index) {
+          if (index == cp.data.length) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Center(
+                  child: data is CursorPaginationFetchingMore
+                      ? CircularProgressIndicator()
+                      : Text('마지막 데이터입니다')),
             );
-          },
-          separatorBuilder: (_, index) {
-            return SizedBox(height: 16.0);
-          },
-        ),
+          }
+          final pItem = cp.data[index];
+          return GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => RestaurantDetailScreen(
+                    id: pItem.id,
+                  ),
+                ),
+              );
+            },
+            child: RestaurantCard.fromModel(model: pItem),
+          );
+        },
+        separatorBuilder: (_, index) {
+          return SizedBox(height: 16.0);
+        },
+      ),
     );
   }
 }
