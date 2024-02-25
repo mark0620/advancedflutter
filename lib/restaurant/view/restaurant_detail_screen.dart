@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 class RestaurantDetailScreen extends ConsumerWidget {
   final String id;
 
@@ -18,30 +17,21 @@ class RestaurantDetailScreen extends ConsumerWidget {
     Key? key,
   }) : super(key: key);
 
-  Future<RestaurantDetailModel> getRestaurantDetail(WidgetRef ref) async {
-    final dio = ref.watch(dioProvidor);
-
-    final repository = RestaurantRepository(dio, baseUrl: 'http://$ip/restaurant');
-
-    return repository.getRestaurantDetail(id: id);
-
-    
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultLayout(
       title: '불타는떡볶이',
       child: FutureBuilder<RestaurantDetailModel>(
-        future: getRestaurantDetail(ref),
-        builder: (_, AsyncSnapshot<RestaurantDetailModel>snapshot){
-          if(snapshot.hasError){
+        future:
+            ref.watch(restaurantRepositoryProvider).getRestaurantDetail(id: id),
+        builder: (_, AsyncSnapshot<RestaurantDetailModel> snapshot) {
+          if (snapshot.hasError) {
             return Center(
               child: Text(snapshot.error.toString()),
             );
           }
 
-          if(!snapshot.hasData){
+          if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -61,12 +51,11 @@ class RestaurantDetailScreen extends ConsumerWidget {
 
   renderTop({
     required RestaurantDetailModel model,
-}) {
+  }) {
     return SliverToBoxAdapter(
       child: RestaurantCard.fromModel(
         model: model,
         isDetail: true,
-
       ),
     );
   }
@@ -88,7 +77,7 @@ class RestaurantDetailScreen extends ConsumerWidget {
 
   SliverPadding renderProducts({
     required List<RestaurantProductModel> products,
-}) {
+  }) {
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: 16.0),
       sliver: SliverList(
