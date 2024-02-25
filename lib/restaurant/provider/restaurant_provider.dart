@@ -43,12 +43,20 @@ class RestaurantStateNotifier extends StateNotifier<CursorPaginationBase> {
     //바로 반환하는 상황 먼저 코딩
     //1] hasmore == false(기존 상태에서 이미 다음 데이터가 없다는 값을 들고 있다면)
     //2] 로딩중 -> fetchMore가 true일때
-    //            fetchMore가 false일때는 새로고침의 의도가 있다.
+    //            fetchMore가 false일때는 새로고침의 의도가 있다. -> 반환하지 않음
     if(state is CursorPagination && !forceRefetch){
       final pState = state as CursorPagination;
       if(!pState.meta.hasMore){
         return;
       }
+    }
+    final isLoading = state is CursorPaginationLoading;
+    final isRefetching = state is CursorPaginationRefetching;
+    final isFetchingMore = state is CursorPaginationFetchingMore;
+
+    //2] 반환 상황
+    if(fetchMore && (isLoading || isRefetching || isFetchingMore)){
+      return;
     }
 
   }
