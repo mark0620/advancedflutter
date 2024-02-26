@@ -13,6 +13,7 @@ class RestaurantCard extends StatelessWidget {
   final double ratings;
   final bool isDetail;
   final String? detail;
+  final String? heroKey;
 
   const RestaurantCard({
     required this.image,
@@ -24,19 +25,20 @@ class RestaurantCard extends StatelessWidget {
     required this.ratings,
     this.isDetail = false,
     this.detail,
-
+    this.heroKey,
     Key? key,
   }) : super(key: key);
 
   factory RestaurantCard.fromModel({
     required RestaurantModel model,
     bool isDetail = false,
-}){
+  }) {
     return RestaurantCard(
       image: Image.network(
         model.thumbUrl,
         fit: BoxFit.cover,
       ),
+      heroKey: model.id,
       name: model.name,
       tags: model.tags,
       ratings: model.ratings,
@@ -46,21 +48,25 @@ class RestaurantCard extends StatelessWidget {
       isDetail: isDetail,
       detail: model is RestaurantDetailModel ? model.detail : null,
     );
-
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if(isDetail)
-          image,
-        if(!isDetail)
-        ClipRRect(
-          borderRadius: BorderRadius.circular(12.0),
-          child: image,
-        ),
+        if (heroKey != null)
+          Hero(
+            tag: ObjectKey(heroKey),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(isDetail ? 0 : 12.0),
+              child: image,
+            ),
+          ),
+        if (heroKey == null)
+          ClipRRect(
+            borderRadius: BorderRadius.circular(isDetail ? 0 : 12.0),
+            child: image,
+          ),
         const SizedBox(height: 8.0),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: isDetail ? 16.0 : 0),
@@ -114,7 +120,7 @@ class RestaurantCard extends StatelessWidget {
             ],
           ),
         ),
-        if(detail != null && isDetail)
+        if (detail != null && isDetail)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Text(
