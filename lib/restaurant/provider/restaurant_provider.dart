@@ -10,7 +10,7 @@ final restaurantDetailProvider =
   final state = ref.watch(restaurantProvider);
 
   //data가 없을때
-  if (state is! CursorPagination<RestaurantModel>) {
+  if (state is! CursorPagination) {
     return null;
   }
   return state.data.firstWhere((element) => element.id == id);
@@ -34,7 +34,7 @@ class RestaurantStateNotifier extends StateNotifier<CursorPaginationBase> {
     paginate();
   }
 
-  void paginate({
+  Future<void> paginate({
     int fetchCount = 20,
 
     //true면 추가로 데이터 가져오기
@@ -125,5 +125,26 @@ class RestaurantStateNotifier extends StateNotifier<CursorPaginationBase> {
     } catch (e) {
       state = CursorPaginationError(message: 'data fetching error');
     }
+  }
+
+  void getDetail({
+    required String id,
+  }) async {
+    //데이터가 하나도 없는 상태라면 데이터를 가져오는 시도를 한다.
+    if (state is! CursorPagination) {
+      await this.paginate();
+    }
+
+    //state가 Cursorpagination이 아닐때 그냥 리턴
+    if (state is! CursorPagination) {
+      return;
+    }
+
+    final pState = state as CursorPagination;
+
+    final resp = await repository.getRestaurantDetail(id: id);
+    state = pState.copyWith(
+      data: pState.data.map<RestaurantModel>((e) => e.id == id ? resp : e).toList(),
+    );
   }
 }
