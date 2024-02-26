@@ -2,6 +2,7 @@ import 'package:advancedflutter/common/const/data.dart';
 import 'package:advancedflutter/common/dio/dio.dart';
 import 'package:advancedflutter/common/layout/default_layout.dart';
 import 'package:advancedflutter/product/component/product_card.dart';
+import 'package:advancedflutter/rating/component/rating_card.dart';
 import 'package:advancedflutter/restaurant/component/restaurant_card.dart';
 import 'package:advancedflutter/restaurant/model/restaurant_detail_model.dart';
 import 'package:advancedflutter/restaurant/model/restaurant_model.dart';
@@ -52,6 +53,20 @@ class _RestaurantDetailScreenState
           if (state is RestaurantDetailModel) renderLabel(),
           if (state is RestaurantDetailModel)
             renderProducts(products: state.products),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            sliver: SliverToBoxAdapter(
+              child: RatingCard(
+                avatarImage: AssetImage(
+                  'asset/img/logo/codefactory_logo.png',
+                ),
+                images: [],
+                rating: 4,
+                email: 'jc@codefactory.ai',
+                content: '맛있',
+              ),
+            ),
+          ),
         ],
       ),
     );
