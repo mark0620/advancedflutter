@@ -2,6 +2,7 @@ import 'package:advancedflutter/common/const/data.dart';
 import 'package:advancedflutter/common/dio/dio.dart';
 import 'package:advancedflutter/common/model/cursor_pagination_model.dart';
 import 'package:advancedflutter/common/model/pagination_params.dart';
+import 'package:advancedflutter/common/repository/base_pagination_repository.dart';
 import 'package:advancedflutter/restaurant/model/restaurant_detail_model.dart';
 import 'package:advancedflutter/restaurant/model/restaurant_model.dart';
 import 'package:dio/dio.dart' hide Headers;
@@ -20,7 +21,8 @@ final restaurantRepositoryProvider = Provider<RestaurantRepository>((ref) {
 });
 
 @RestApi()
-abstract class RestaurantRepository {
+abstract class RestaurantRepository
+    implements IBasePaginationRepository<RestaurantModel> {
   //baseUrl : http://$ip/restaurant
   factory RestaurantRepository(Dio dio, {String baseUrl}) =
       _RestaurantRepository;
@@ -30,7 +32,7 @@ abstract class RestaurantRepository {
   @Headers({'accessToken': 'true'})
   Future<CursorPagination<RestaurantModel>> paginate({
     @Queries() PaginationParams? paginationParams = const PaginationParams(),
-});
+  });
 
   //http://$ip/restaurant/:id
   @GET('/{id}')
