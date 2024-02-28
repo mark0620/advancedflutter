@@ -2,6 +2,7 @@ import 'package:advancedflutter/common/const/data.dart';
 import 'package:advancedflutter/common/dio/dio.dart';
 import 'package:advancedflutter/common/layout/default_layout.dart';
 import 'package:advancedflutter/common/model/cursor_pagination_model.dart';
+import 'package:advancedflutter/common/utils/pagination_utils.dart';
 import 'package:advancedflutter/product/component/product_card.dart';
 import 'package:advancedflutter/rating/component/rating_card.dart';
 import 'package:advancedflutter/rating/model/rating_model.dart';
@@ -31,12 +32,25 @@ class RestaurantDetailScreen extends ConsumerStatefulWidget {
 
 class _RestaurantDetailScreenState
     extends ConsumerState<RestaurantDetailScreen> {
+  final ScrollController controller = ScrollController();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
     ref.read(restaurantProvider.notifier).getDetail(id: widget.id);
+
+    controller.addListener(listener);
+  }
+
+  void listener() {
+    PaginationUtils.paginate(
+      controller: controller,
+      provider: ref.read(
+        restaurantRatingProvider(widget.id).notifier,
+      ),
+    );
   }
 
   @override
@@ -51,6 +65,7 @@ class _RestaurantDetailScreenState
     return DefaultLayout(
       title: '불타는떡볶이',
       child: CustomScrollView(
+        controller: controller,
         slivers: [
           renderTop(model: state),
           if (state is! RestaurantDetailModel) renderLoading(),

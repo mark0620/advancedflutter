@@ -1,4 +1,5 @@
 import 'package:advancedflutter/common/model/cursor_pagination_model.dart';
+import 'package:advancedflutter/common/utils/pagination_utils.dart';
 import 'package:advancedflutter/restaurant/component/restaurant_card.dart';
 import 'package:advancedflutter/restaurant/model/restaurant_model.dart';
 import 'package:advancedflutter/restaurant/provider/restaurant_provider.dart';
@@ -27,11 +28,15 @@ class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
   }
 
   void scrollListener() {
-    if (controller.offset > controller.position.maxScrollExtent - 300) {
-      ref.read(restaurantProvider.notifier).paginate(
-            fetchMore: true,
-          );
-    }
+    PaginationUtils.paginate(
+      controller: controller,
+      provider: ref.read(restaurantProvider.notifier),
+    );
+    // if (controller.offset > controller.position.maxScrollExtent - 300) {
+    //   ref.read(restaurantProvider.notifier).paginate(
+    //         fetchMore: true,
+    //       );
+    // }
   }
 
   @override
@@ -65,7 +70,8 @@ class _RestaurantScreenState extends ConsumerState<RestaurantScreen> {
         itemBuilder: (_, index) {
           if (index == cp.data.length) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Center(
                   child: data is CursorPaginationFetchingMore
                       ? CircularProgressIndicator()
