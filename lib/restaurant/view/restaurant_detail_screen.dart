@@ -7,6 +7,7 @@ import 'package:advancedflutter/restaurant/component/restaurant_card.dart';
 import 'package:advancedflutter/restaurant/model/restaurant_detail_model.dart';
 import 'package:advancedflutter/restaurant/model/restaurant_model.dart';
 import 'package:advancedflutter/restaurant/provider/restaurant_provider.dart';
+import 'package:advancedflutter/restaurant/provider/restaurant_rating_provier.dart';
 import 'package:advancedflutter/restaurant/repository/restaurant_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -39,6 +40,9 @@ class _RestaurantDetailScreenState
   @override
   Widget build(BuildContext context) {
     final state = ref.watch((restaurantDetailProvider(widget.id)));
+    final ratingsState = ref.watch(restaurantRatingProvider(widget.id));
+
+
 
     if (state == null) {
       return DefaultLayout(child: Center(child: CircularProgressIndicator()));
