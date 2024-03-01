@@ -15,8 +15,11 @@ class PaginationListView<T extends IModelWithId>
 
   final PaginationWidgetBuilder<T> itembuilder;
 
-  const PaginationListView(
-      {required this.itembuilder, required this.provider, super.key});
+  const PaginationListView({
+    required this.provider,
+    required this.itembuilder,
+    super.key,
+  });
 
   @override
   ConsumerState<PaginationListView> createState() =>
