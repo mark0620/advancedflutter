@@ -59,7 +59,11 @@ class _RestaurantDetailScreenState
     final ratingsState = ref.watch(restaurantRatingProvider(widget.id));
 
     if (state == null) {
-      return DefaultLayout(child: Center(child: CircularProgressIndicator()));
+      return DefaultLayout(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
 
     return DefaultLayout(

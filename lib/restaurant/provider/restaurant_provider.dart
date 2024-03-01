@@ -3,6 +3,7 @@ import 'package:advancedflutter/common/provider/pagination_provider.dart';
 import 'package:advancedflutter/restaurant/model/restaurant_model.dart';
 import 'package:advancedflutter/restaurant/repository/restaurant_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:collection/collection.dart';
 
 //반환하는 값은 RestaurantModel, 입력하는 값은 id(String)
 final restaurantDetailProvider =
@@ -13,7 +14,7 @@ final restaurantDetailProvider =
   if (state is! CursorPagination) {
     return null;
   }
-  return state.data.firstWhere((element) => element.id == id);
+  return state.data.firstWhereOrNull((element) => element.id == id);
 });
 
 final restaurantProvider =
@@ -47,10 +48,21 @@ class RestaurantStateNotifier
     final pState = state as CursorPagination;
 
     final resp = await repository.getRestaurantDetail(id: id);
-    state = pState.copyWith(
-      data: pState.data
-          .map<RestaurantModel>((e) => e.id == id ? resp : e)
-          .toList(),
-    );
+
+    if(pState.data.where((e) => e.id == id).isEmpty){
+      state = pState.copyWith(
+        data: <RestaurantModel>[
+          ...pState.data,
+          resp,
+        ],
+      );
+    }else{
+      state = pState.copyWith(
+        data: pState.data
+            .map<RestaurantModel>((e) => e.id == id ? resp : e)
+            .toList(),
+      );
+    }
+
   }
 }
