@@ -9,6 +9,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'splash';
+
   const SplashScreen({
     Key? key,
   }) : super(key: key);
