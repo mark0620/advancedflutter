@@ -93,7 +93,7 @@ class _UserMeRepository implements UserMeRepository {
     )
             .compose(
               _dio.options,
-              '/baseket',
+              '/basket',
               queryParameters: queryParameters,
               data: _data,
             )

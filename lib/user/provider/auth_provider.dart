@@ -2,6 +2,7 @@ import 'package:advancedflutter/common/const/data.dart';
 import 'package:advancedflutter/common/dio/dio.dart';
 import 'package:advancedflutter/common/view/root_tab.dart';
 import 'package:advancedflutter/common/view/splash_screen.dart';
+import 'package:advancedflutter/restaurant/view/basket_screen.dart';
 import 'package:advancedflutter/restaurant/view/restaurant_detail_screen.dart';
 import 'package:advancedflutter/user/model/user_model.dart';
 import 'package:advancedflutter/user/provider/user_me_provider.dart';
@@ -50,6 +51,11 @@ class AuthProvider extends ChangeNotifier {
               ),
             ]),
         GoRoute(
+          path: '/basket',
+          name: BasketScreen.routeName,
+          builder: (_, state) => BasketScreen(),
+        ),
+        GoRoute(
           path: '/splash',
           name: SplashScreen.routeName,
           builder: (_, __) => SplashScreen(),
@@ -61,7 +67,7 @@ class AuthProvider extends ChangeNotifier {
         ),
       ];
 
-  void logout(){
+  void logout() {
     ref.read(userMeProvider.notifier).logout();
   }
 

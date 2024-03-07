@@ -32,7 +32,7 @@ abstract class UserMeRepository {
   })
   Future<List<BasketItemModel>> getBasket();
 
-  @PATCH('/baseket')
+  @PATCH('/basket')
   @Headers({
     'accessToken': 'true',
   })
