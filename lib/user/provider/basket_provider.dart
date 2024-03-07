@@ -3,12 +3,16 @@ import 'package:advancedflutter/user/model/basket_item_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:collection/collection.dart';
 
+final basketProvider = StateNotifierProvider<BasketProvider,List<BasketItemModel>>((ref) {
+  return BasketProvider();
+});
+
 class BasketProvider extends StateNotifier<List<BasketItemModel>> {
   BasketProvider() : super([]);
 
   Future<void> addToBasket({
     required ProductModel product,
-  }) {
+  }) async {
     //1)아직 장바구니에 해당되는 상품이 없다면 장바구니에 상품을 추가한다.
     //2) 만약에 들어있다면 +1을 한다.
     final exists =
