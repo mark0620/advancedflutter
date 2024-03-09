@@ -1,5 +1,8 @@
 import 'package:advancedflutter/common/const/data.dart';
 import 'package:advancedflutter/common/dio/dio.dart';
+import 'package:advancedflutter/common/model/cursor_pagination_model.dart';
+import 'package:advancedflutter/common/model/pagination_params.dart';
+import 'package:advancedflutter/common/repository/base_pagination_repository.dart';
 import 'package:advancedflutter/order/model/order_model.dart';
 import 'package:advancedflutter/order/model/post_order_body.dart';
 import 'package:dio/dio.dart' hide Headers;
@@ -16,8 +19,16 @@ final orderRepositoryProvider = Provider<OrderRepository>(
 );
 
 @RestApi()
-abstract class OrderRepository {
+abstract class OrderRepository implements IBasePaginationRepository<OrderModel> {
   factory OrderRepository(Dio dio, {String baseUrl}) = _OrderRepository;
+
+  @GET('/')
+  @Headers({
+    'accessToken': 'true',
+  })
+  Future<CursorPagination<OrderModel>> paginate({
+    @Queries() PaginationParams? paginationParams = const PaginationParams(),
+  });
 
   @POST('/')
   @Headers({
