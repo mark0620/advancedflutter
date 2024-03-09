@@ -1,4 +1,3 @@
-import 'package:advancedflutter/user/model/basket_item_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'post_order_body.g.dart';
@@ -8,13 +7,13 @@ class PostOrderBody {
   final String id;
   final List<PostOrderBodyProduct> products;
   final int totalPrice;
-  final String createAt;
+  final String createdAt;
 
   PostOrderBody({
     required this.id,
     required this.products,
     required this.totalPrice,
-    required this.createAt,
+    required this.createdAt,
   });
 
   factory PostOrderBody.fromJson(Map<String, dynamic> json) =>

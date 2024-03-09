@@ -8,7 +8,10 @@ import 'package:uuid/uuid.dart';
 final orderProvider =
     StateNotifierProvider<OrderStateNotifier, List<OrderModel>>((ref) {
   final repo = ref.watch(orderRepositoryProvider);
-  return OrderStateNotifier(ref: ref, repository: repo);
+  return OrderStateNotifier(
+    ref: ref,
+    repository: repo,
+  );
 });
 
 class OrderStateNotifier extends StateNotifier<List<OrderModel>> {
@@ -43,10 +46,17 @@ class OrderStateNotifier extends StateNotifier<List<OrderModel>> {
               0,
               (p, n) => p + (n.count * n.product.price),
             ),
-            createAt: DateTime.now().toString()),
+            createdAt: DateTime.now().toString()),
       );
+      print('=========');
+      print('true');
+
       return true;
-    } catch (e) {
+    } catch (e,stackTrace) {
+      print(e);
+      print(stackTrace);
+      print('=========');
+      print('false');
       return false;
     }
   }
